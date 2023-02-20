@@ -225,9 +225,6 @@ jobs:
             npm i qs
             npm i ajv
             npm update path-parse --depth 
-            npm uninstall webpack --save-dev
-            npm install webpack@2.1.0-beta.22 --save-dev
-            node --max_old_space_size=4096 node_modules/@angular/cli/bin/ng build --prod
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
