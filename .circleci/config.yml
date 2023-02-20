@@ -224,6 +224,7 @@ jobs:
             npm install
             npm i qs
             npm i ajv
+            npm update path-parse --depth 3
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
