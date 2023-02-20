@@ -226,6 +226,8 @@ jobs:
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+            npm i qs
+            npm i ajv
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
                
