@@ -384,14 +384,7 @@ jobs:
        - destroy-environment
        - revert-migrations
 
-  cleanup:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - install_awscli
-      - install_nodejs
-      - run: 
+       - run: 
           name: cleaning up old stack
           command: | 
             OLD_WORKFLOW_ID=$(curl -s --insecure https://kvdb.io/61SZUvhbAAGHkELRK6sjK9/OLD_WORKFLOW_ID)
@@ -435,5 +428,4 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
+      
