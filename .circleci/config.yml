@@ -380,28 +380,30 @@ jobs:
             --stack-name InitialStack \
             --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
-            
+
        - destroy-environment
        - revert-migrations
 
-# cleanup:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Get old stack workflow id
-#           command: |
-#             # your code here
-#             export OldWorkflowID="the id here"
-#             export STACKS=[] #put the list of stacks here
-#       - run:
-#           name: Remove old stacks and files
-#           command: |
-#             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-#             then
-#               # your code here
-#             fi
+  cleanup:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - install_awscli
+      - install_nodejs
+      - run: 
+          name: cleaning up old stack
+          command: | 
+            OLD_WORKFLOW_ID=$(curl -s --insecure https://kvdb.io/61SZUvhbAAGHkELRK6sjK9/OLD_WORKFLOW_ID)
+            STACKS=$(curl -s --insecure https://kvdb.io/61SZUvhbAAGHkELRK6sjK9/STACKS)
+            echo ${OLD_WORKFLOW_ID}
+            echo ${STACKS}
+            if [[ "${STACKS[@]}" =~ "${OLD_WORKFLOW_ID}" ]]
+            then 
+              aws s3 rm "s3://udapeople-${OLD_WORKFLOW_ID}" --recursive
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOW_ID}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOW_ID}" 
+            fi
             
 workflows:
   default:
@@ -433,5 +435,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
