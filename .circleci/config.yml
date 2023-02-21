@@ -68,8 +68,6 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            echo '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-            printenv
             npm install
             npm run build
       - save_cache:
@@ -232,7 +230,7 @@ jobs:
           command: |   
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then 
-              curl --insecure https://kvdb.io/61SZUvhbAAGHkELRK6sjK9/migration_${CIRCLE_WORKFLOW_ID:0:7} -d "1"
+              curl --insecure https://kvdb.io/ULwJZRtW7KcDeWLVbFzZ2r/migration_${CIRCLE_WORKFLOW_ID:0:7} -d "1"
             fi
            
       - destroy-environment
